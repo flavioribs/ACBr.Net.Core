@@ -1843,13 +1843,31 @@ namespace ACBr.Net.Core
         /// <returns>String do tamanho especificado e se menor complementada com o caractere informado a direita/esquerda</returns>
         public static string StringFill(this string text, char with, int length, bool esquerda = true)
         {
-            string ret = string.Empty;
-            if (esquerda)
-                ret = text.PadLeft(length, with);
+            if (text.Length > length)
+            {
+                text = text.Remove(length);
+            }
             else
-                ret = text.PadRight(length, with);
+            {
+                length -= text.Length;
 
-            return ret;
+                if (esquerda)
+                {
+                    for (int i = 0; i < length; ++i)
+                    {
+                        text = with + text;
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < length; ++i)
+                    {
+                        text += with;
+                    }
+                }
+            }
+
+            return text;
         }
 
         /// <summary>
@@ -1859,9 +1877,9 @@ namespace ACBr.Net.Core
         /// <param name="length">Tamanho final desejado</param>
         /// <param name="esquerda">Direção do preenchimento</param>
         /// <returns>String do tamanho especificado e se menor complementada com zero a direita/esquerda</returns>
-        public static string ZeroFill(this string text, int length, bool esquerda = true)
+        public static string ZeroFill(this string text, int length)
         {
-            return text.StringFill('0', length, esquerda);
+            return text.StringFill('0', length, true);
         }
 
         /// <summary>
