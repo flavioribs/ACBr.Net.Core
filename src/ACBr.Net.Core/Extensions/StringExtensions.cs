@@ -1834,9 +1834,9 @@ namespace ACBr.Net.Core
         }
 
         /// <summary>
-        /// Preenche uma string com caractere informado a direita/esquerda ate ficar do tamanho especificado.
+        /// Alinha a string a direita/esquerda e preenche com caractere informado ate ficar do tamanho especificado.
         /// </summary>
-        /// <param name="text">The text.</param>
+        /// <param name="text">O texto</param>
         /// <param name="with">Caractere para preencher</param>
         /// <param name="length">Tamanho final desejado</param>
         /// <param name="esquerda">Direção do preenchimento</param>
@@ -1869,6 +1869,32 @@ namespace ACBr.Net.Core
 
             return text;
         }
+        
+        /// <summary>
+        /// Alinha a string a direita e preenche a esquerda com o caracter informado até ficar do tamanho especificado.
+        /// Se tamanho menor que a string atual retorna uma string do tamanho especificado.
+        /// </summary>
+        /// <param name="text">O texto.</param>
+        /// <param name="with">Caractere para preencher</param>
+        /// <param name="length">Tamanho final desejado</param>
+        /// <returns>String do tamanho especificado e se menor complementada com o caractere informado a esquerda</returns>
+        public static string FillRight(this string text, int length, char with = ' ')
+        {
+            return text.StringFill(length, with);
+        }
+
+        /// <summary>
+        /// Alinha a string a esquerda e preenche a direita com o caracter informado até ficar do tamanho especificado.
+        /// Se tamanho menor que a string atual retorna uma string do tamanho especificado.
+        /// </summary>
+        /// <param name="text">O texto.</param>
+        /// <param name="with">Caractere para preencher</param>
+        /// <param name="length">Tamanho final desejado</param>
+        /// <returns>String do tamanho especificado e se menor complementada com o caractere informado a direita</returns>
+        public static string FillLeft(this string text, int length, char with = ' ')
+        {
+            return text.StringFill(length, with, false);
+        }
 
         /// <summary>
         /// Preenche uma string com zero a direita/esquerda ate ficar do tamanho especificado.
@@ -1879,7 +1905,7 @@ namespace ACBr.Net.Core
         /// <returns>String do tamanho especificado e se menor complementada com zero a direita/esquerda</returns>
         public static string ZeroFill(this string text, int length)
         {
-            return text.StringFill(length, '0', true);
+            return text.StringFill(length, '0');
         }
 
         /// <summary>
