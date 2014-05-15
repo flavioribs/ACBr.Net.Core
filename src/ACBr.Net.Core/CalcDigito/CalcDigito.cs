@@ -4,7 +4,7 @@
 // Created          : 03-23-2014
 //
 // Last Modified By : RFTD
-// Last Modified On : 04-23-2014
+// Last Modified On : 05-05-2014
 // ***********************************************************************
 // <copyright file="CalcDigito.cs" company="ACBr.Net">
 //     Copyright (c) ACBr.Net. All rights reserved.
@@ -17,9 +17,9 @@ using System.Linq;
 using ACBr.Net.Core;
 
 /// <summary>
-/// The Boleto namespace.
+/// ACBr.Net.Core namespace.
 /// </summary>
-namespace ACBr.Net.Boleto
+namespace ACBr.Net.Core
 {
     /// <summary>
     /// Class CalcDigito. This class cannot be inherited.
@@ -29,7 +29,7 @@ namespace ACBr.Net.Boleto
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CalcDigito"/> class.
+        /// Initializes a new instance of the <see cref="CalcDigito" /> class.
         /// </summary>
         public CalcDigito()
         {

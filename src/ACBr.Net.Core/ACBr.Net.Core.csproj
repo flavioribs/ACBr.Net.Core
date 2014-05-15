@@ -79,6 +79,7 @@
     <Compile Include="Exceptions\ACBrTEFDException.cs" />
     <Compile Include="Extensions\AssemblyExtenssions.cs" />
     <Compile Include="Extensions\CharExtensions.cs" />
+    <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="Generics\GenericCollection.cs" />
     <Compile Include="NFe\GenericNFeCollection.cs" />
     <Compile Include="ECF\Interface\IECF.cs" />
@@ -116,9 +117,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\XmlDocumentExtensions.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="PAF\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
