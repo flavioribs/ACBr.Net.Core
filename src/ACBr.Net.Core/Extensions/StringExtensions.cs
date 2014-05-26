@@ -323,34 +323,21 @@ namespace ACBr.Net.Core
         }
 
         /// <summary>
-        /// Called when [numbers].
+        /// Retorna apenas os numeros da string.
         /// </summary>
-        /// <param name="toNormalize">To normalize.</param>
+        /// <param name="toNormalize">String para processar.</param>
         /// <returns>System.String.</returns>
-        /// <exception cref="ACBrException">Erro ao validar string</exception>
+        /// <exception cref="ACBrException">Erro ao processar a string</exception>
         public static string OnlyNumbers(this string toNormalize)
         {
             try
             {
-                List<char> numbers = new List<char>("0123456789");
-                StringBuilder toReturn = new StringBuilder(toNormalize.Length);
-                using (CharEnumerator enumerator = toNormalize.GetEnumerator())
-                {
-                    while (enumerator.MoveNext())
-                    {
-                        if (numbers.Contains(enumerator.Current))
-                            toReturn.Append(enumerator.Current);
-                    }
-                }
-
-                if (toReturn.ToString().Equals(""))
-                    toReturn.Append(0);
-
-                return toReturn.ToString();
+                var toReturn = Regex.Replace(toNormalize, "[^0-9]", string.Empty);
+                return toReturn;
             }
             catch (Exception ex)
             {
-                throw new ACBrException("Erro ao validar string", ex);
+                throw new ACBrException("Erro ao processar a string", ex);
             }
         }
 
@@ -378,14 +365,13 @@ namespace ACBr.Net.Core
         }
 
         /// <summary>
-        /// Determines whether [is CPF or CNPJ] [the specified CPFCNPJ].
+        /// Checar se a string é um [CPF ou CNPJ] válido.
         /// </summary>
-        /// <param name="cpfcnpj">The CPFCNPJ.</param>
-        /// <returns><c>true</c> if [is CPF or CNPJ] [the specified CPFCNPJ]; otherwise, <c>false</c>.</returns>
+        /// <param name="cpfcnpj">CPFCNPJ</param>
+        /// <returns><c>true</c> se o [CPF ou CNPJ] é válido; senão, <c>false</c>.</returns>
         public static bool IsCPFOrCNPJ(this string cpfcnpj)
         {
-            string value = cpfcnpj.Replace(".", string.Empty).Replace("/", string.Empty)
-                .Replace("-", string.Empty).Replace(",", string.Empty);
+            string value = cpfcnpj.OnlyNumbers();
             if (value.Length == 11)
                 return value.IsCPF();
             else if (value.Length == 14)
@@ -395,16 +381,78 @@ namespace ACBr.Net.Core
         }
 
         /// <summary>
-        /// Determines whether the specified vr CNPJ is CNPJ.
+        /// Checa se a string é um CPF válido.
         /// </summary>
-        /// <param name="vrCNPJ">The vr CNPJ.</param>
-        /// <returns><c>true</c> if the specified vr CNPJ is CNPJ; otherwise, <c>false</c>.</returns>
+        /// <param name="vrCPF">CPF</param>
+        /// <returns><c>true</c> se o CPF for válido; senão, <c>false</c>.</returns>
+        /// <exception cref="ACBrException">Erro ao validar CPF</exception>
+        public static bool IsCPF(this string vrCPF)
+        {
+            try
+            {
+                string CPF = vrCPF.OnlyNumbers();
+                if (CPF.Length != 11)
+                    return false;
+                    
+                if (new string(CPF[0], CPF.Length) == CPF || 
+                    CPF == "12345678909")
+                    return false;
+
+                int[] numeros = new int[11];
+                for (int i = 0; i < 11; i++)
+                    numeros[i] = int.Parse(CPF[i].ToString());
+
+                int soma = 0;
+                for (int i = 0; i < 9; i++)
+                    soma += (10 - i) * numeros[i];
+
+                int resultado = soma % 11;
+                if (resultado == 1 || resultado == 0)
+                {
+                    if (numeros[9] != 0)
+                        return false;
+                }
+                else if (numeros[9] != 11 - resultado)
+                    return false;
+
+                soma = 0;
+                for (int i = 0; i < 10; i++)
+                    soma += (11 - i) * numeros[i];
+
+                resultado = soma % 11;
+                if (resultado == 1 || resultado == 0)
+                {
+                    if (numeros[10] != 0)
+                        return false;
+                }
+                else if (numeros[10] != 11 - resultado)
+                    return false;
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new ACBrException("Erro ao validar CPF", ex);
+            }
+        }
+
+        /// <summary>
+        /// Checa se a string é um CNPJ válido.
+        /// </summary>
+        /// <param name="vrCNPJ">CNPJ.</param>
+        /// <returns><c>true</c> se o CNPJ for válido; senão, <c>false</c>.</returns>
         /// <exception cref="ACBrException">Erro ao validar CNPJ</exception>
         public static bool IsCNPJ(this string vrCNPJ)
         {
             try
             {
-                string CNPJ = vrCNPJ.Replace(".", string.Empty).Replace("/", string.Empty).Replace("-", string.Empty).Replace(",", string.Empty);
+                string CNPJ = vrCNPJ.OnlyNumbers();
+                if (CNPJ.Length != 14)
+                    return false;
+
+                if (new string(CNPJ[0], CNPJ.Length) == CNPJ) 
+                    return false;
+
                 int[] resultado = new int[2];
                 int nrDig;
                 const string ftmt = "6543298765432";
@@ -1609,67 +1657,7 @@ namespace ACBr.Net.Core
             {
                 throw new ACBrException("Erro ao IE", ex);
             }
-        }
-
-        /// <summary>
-        /// Determines whether the specified vr CPF is CPF.
-        /// </summary>
-        /// <param name="vrCPF">The vr CPF.</param>
-        /// <returns><c>true</c> if the specified vr CPF is CPF; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ACBrException">Erro ao validar CPF</exception>
-        public static bool IsCPF(this string vrCPF)
-        {
-            try
-            {
-                string valor = vrCPF.Replace(".", string.Empty).Replace("-", string.Empty);
-                if (valor.Length != 11)
-                    return false;
-
-                bool igual = true;
-                for (int i = 1; i < 11 && igual; i++)
-                    if (valor[i] != valor[0])
-                        igual = false;
-
-                if (igual || valor == "12345678909")
-                    return false;
-
-                int[] numeros = new int[11];
-                for (int i = 0; i < 11; i++)
-                    numeros[i] = int.Parse(valor[i].ToString());
-
-                int soma = 0;
-                for (int i = 0; i < 9; i++)
-                    soma += (10 - i) * numeros[i];
-
-                int resultado = soma % 11;
-                if (resultado == 1 || resultado == 0)
-                {
-                    if (numeros[9] != 0)
-                        return false;
-                }
-                else if (numeros[9] != 11 - resultado)
-                    return false;
-
-                soma = 0;
-                for (int i = 0; i < 10; i++)
-                    soma += (11 - i) * numeros[i];
-
-                resultado = soma % 11;
-                if (resultado == 1 || resultado == 0)
-                {
-                    if (numeros[10] != 0)
-                        return false;
-                }
-                else if (numeros[10] != 11 - resultado)
-                    return false;
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw new ACBrException("Erro ao validar CPF", ex);
-            }
-        }
+        }        
 
         /// <summary>
         /// Determines whether the specified pis is pis.
@@ -1852,19 +1840,9 @@ namespace ACBr.Net.Core
                 length -= text.Length;
 
                 if (esquerda)
-                {
-                    for (int i = 0; i < length; ++i)
-                    {
-                        text = with + text;
-                    }
-                }
+                    text = new string(with, length) + text;
                 else
-                {
-                    for (int i = 0; i < length; ++i)
-                    {
-                        text += with;
-                    }
-                }
+                    text += new string(with, length);
             }
 
             return text;
