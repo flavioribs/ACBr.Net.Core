@@ -79,9 +79,10 @@
     <Compile Include="Exceptions\ACBrTEFDException.cs" />
     <Compile Include="Extensions\AssemblyExtenssions.cs" />
     <Compile Include="Extensions\CharExtensions.cs" />
+    <Compile Include="Exceptions\Guard.cs" />
+    <Compile Include="Extensions\IListExtension.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="Generics\GenericCollection.cs" />
-    <Compile Include="NFe\GenericNFeCollection.cs" />
     <Compile Include="ECF\Interface\IECF.cs" />
     <Compile Include="AAC\AACECF.cs" />
     <Compile Include="AAC\Arquivo.cs" />
@@ -105,10 +106,8 @@
     <Compile Include="Logging\NLogLogger.cs" />
     <Compile Include="Logging\NoLoggingInternalLogger.cs" />
     <Compile Include="Logging\NoLoggingLoggerFactory.cs" />
-    <Compile Include="NFe\IGerador.cs" />
-    <Compile Include="NFe\NfePais.cs" />
-    <Compile Include="NFe\NFeUF.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\StaticRandom.cs" />
     <Compile Include="TEF\UtilTEF.cs" />
     <Compile Include="Extensions\ACBrComponentExtensions.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />

@@ -74,5 +74,10 @@ namespace ACBr.Net.Core
             var dt = new DateTime(1997, 10, 07);
             return string.Format("{0:0000}", (DataVencimento - dt).TotalDays);
         }
+
+		public static string ToJulianDate(this DateTime data)
+		{
+			return string.Format("{0:yy}{1:D3}", data, data.DayOfYear);
+		}
     }
 }
