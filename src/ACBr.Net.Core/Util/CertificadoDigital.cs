@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Assembly         : ACBr.Net.NFe
+// Assembly         : ACBr.Net.Core
 // Author           : arezende
 // Created          : 07-27-2014
 //

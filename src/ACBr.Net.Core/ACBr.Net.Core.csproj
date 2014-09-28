@@ -107,7 +107,6 @@
     <Compile Include="Logging\NLogLogger.cs" />
     <Compile Include="Logging\NoLoggingInternalLogger.cs" />
     <Compile Include="Logging\NoLoggingLoggerFactory.cs" />
-    <Compile Include="NFe\CertificadoDigital.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\CertificadoDigital.cs" />
     <Compile Include="Util\StaticRandom.cs" />
