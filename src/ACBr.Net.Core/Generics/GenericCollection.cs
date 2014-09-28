@@ -73,6 +73,6 @@ namespace ACBr.Net.Core
 			return GetEnumerator();
 		}
 
-		#endregion IEnumerable<NotasFiscais>
+		#endregion IEnumerable<T>
 	}
 }

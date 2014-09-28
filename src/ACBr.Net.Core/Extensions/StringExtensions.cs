@@ -220,7 +220,9 @@ namespace ACBr.Net.Core
             try
             {
                 double converted = new double();
-                if (!Double.TryParse(dados, out converted))
+                if (!Double.TryParse(dados, NumberStyles.Any,
+                                            CultureInfo.CurrentCulture,
+                                            out converted))
                     converted = def;
 
                 return converted;

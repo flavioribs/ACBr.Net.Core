@@ -24,7 +24,7 @@ namespace ACBr.Net.Core
     /// <summary>
     /// Class CalcDigito. This class cannot be inherited.
     /// </summary>
-    public sealed class CalcDigito
+    public sealed class CalcDigito : IDisposable
     {
         #region Constructor
 
@@ -179,6 +179,10 @@ namespace ACBr.Net.Core
             FormulaDigito = CalcDigFormula.Modulo11;
         }
 
-        #endregion Methods
-    }
+		public void Dispose()
+		{
+		}
+
+        #endregion Methods		
+	}
 }
