@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace ACBr.Net.Core
+namespace ACBr.Net.Core.Exceptions
 {
     public class ACBrNFSeException : Exception
     {

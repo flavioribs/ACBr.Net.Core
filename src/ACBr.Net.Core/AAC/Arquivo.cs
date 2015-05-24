@@ -21,9 +21,6 @@ using System.Runtime.InteropServices;
 
 #endregion COM_INTEROP
 
-/// <summary>
-/// The AAC namespace.
-/// </summary>
 namespace ACBr.Net.Core.AAC
 {
 	#region COM_INTEROP

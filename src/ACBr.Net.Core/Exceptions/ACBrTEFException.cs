@@ -4,9 +4,9 @@
 // Created          : 03-21-2014
 //
 // Last Modified By : RFTD
-// Last Modified On : 07-25-2014
+// Last Modified On : 02-06-2014
 // ***********************************************************************
-// <copyright file="ACBrNFeException.cs" company="ACBr.Net">
+// <copyright file="ACBrTEFException.cs" company="ACBr.Net">
 // Esta biblioteca é software livre; você pode redistribuí-la e/ou modificá-la
 // sob os termos da Licença Pública Geral Menor do GNU conforme publicada pela
 // Free Software Foundation; tanto a versão 2.1 da Licença, ou (a seu critério)
@@ -28,66 +28,61 @@
 
 using System;
 using System.Runtime.Serialization;
-using JetBrains.Annotations;
 
 namespace ACBr.Net.Core.Exceptions
 {
     /// <summary>
-    /// Classe ACBrNFeException.
+    /// Classe ACBrTEFException.
     /// </summary>
-	public class ACBrNFeException : Exception
+    // ReSharper disable once InconsistentNaming
+    public class ACBrTEFException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ACBrNFeException" /> class with a specified error message.
+        /// Initializes a new instance of the <see cref="ACBrTEFException" /> class with a specified error message.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public ACBrNFeException(string message)
+        public ACBrTEFException(string message)
             : base(message)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ACBrNFeException"/> class.
+        /// Initializes a new instance of the <see cref="ACBrTEFException"/> class.
         /// </summary>
-        public ACBrNFeException()
+        public ACBrTEFException()
         {
 
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ACBrNFeException" /> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+        /// Initializes a new instance of the <see cref="ACBrTEFException"/> class.
+        /// </summary>
+        /// <param name="ex">The ex.</param>
+        public ACBrTEFException(Exception ex):base(ex.Message)
+        {
+
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ACBrTEFException" /> class with a specified error message and a reference to the inner exception that is the cause of this exception.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="innerException">The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
-        public ACBrNFeException(string message, Exception innerException)
+        public ACBrTEFException(string message, Exception innerException)
             : base(message, innerException)
         {
 
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ACBrNFeException"/> class.
-        /// </summary>
-        /// <param name="innerException">The inner exception.</param>
-        /// <param name="message">The message.</param>
-        /// <param name="args">The arguments.</param>
-        [StringFormatMethod("message")]
-        public ACBrNFeException(Exception innerException, string message, params object[] args)
-            : base(string.Format(message, args), innerException)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ACBrNFeException" /> class with serialized data.
+        /// Initializes a new instance of the <see cref="ACBrTEFException" /> class with serialized data.
         /// </summary>
         /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> that holds the serialized object data about the exception being thrown.</param>
         /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" /> that contains contextual information about the source or destination.</param>
-        protected ACBrNFeException(SerializationInfo info, StreamingContext context)
+        protected ACBrTEFException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
 
         }
-
     }
 }
-

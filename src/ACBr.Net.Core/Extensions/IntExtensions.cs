@@ -1,12 +1,12 @@
 // ***********************************************************************
 // Assembly         : ACBr.Net.Core
 // Author           : RFTD
-// Created          : 03-21-2014
+// Created          : 04-21-2015
 //
 // Last Modified By : RFTD
-// Last Modified On : 01-30-2015
+// Last Modified On : 04-21-2015
 // ***********************************************************************
-// <copyright file="ILoggerFactory.cs" company="ACBr.Net">
+// <copyright file="IntExtensions.cs" company="">
 // Esta biblioteca é software livre; você pode redistribuí-la e/ou modificá-la
 // sob os termos da Licença Pública Geral Menor do GNU conforme publicada pela
 // Free Software Foundation; tanto a versão 2.1 da Licença, ou (a seu critério)
@@ -25,27 +25,34 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
 
-namespace ACBr.Net.Core.Logging
+namespace ACBr.Net.Core.Extensions
 {
     /// <summary>
-    /// Interface ILoggerFactory
+    /// Classe IntExtensions.
     /// </summary>
-	public interface ILoggerFactory
-	{
+    public static class IntExtensions
+    {
         /// <summary>
-        /// Loggers for.
+        /// Zeroes the fill.
         /// </summary>
-        /// <param name="keyName">Name of the key.</param>
-        /// <returns>IInternalLogger.</returns>
-		IInternalLogger LoggerFor(string keyName);
+        /// <param name="value">The value.</param>
+        /// <param name="length">The length.</param>
+        /// <returns>System.String.</returns>
+        public static string ZeroFill(this int? value, int length)
+        {
+            return value.HasValue ? value.Value.ToString().ZeroFill(length) : "".ZeroFill(length);
+        }
 
         /// <summary>
-        /// Loggers for.
+        /// Zeroes the fill.
         /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns>IInternalLogger.</returns>
-		IInternalLogger LoggerFor(Type type);
-	}
+        /// <param name="value">The value.</param>
+        /// <param name="length">The length.</param>
+        /// <returns>System.String.</returns>
+        public static string ZeroFill(this int value, int length)
+        {
+            return ((int?)value).ZeroFill(length);
+        }
+    }
 }

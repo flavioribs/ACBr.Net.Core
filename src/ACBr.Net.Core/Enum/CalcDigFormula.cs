@@ -1,12 +1,12 @@
 // ***********************************************************************
 // Assembly         : ACBr.Net.Core
 // Author           : RFTD
-// Created          : 03-21-2014
+// Created          : 03-23-2014
 //
 // Last Modified By : RFTD
-// Last Modified On : 01-30-2015
+// Last Modified On : 04-25-2015
 // ***********************************************************************
-// <copyright file="ILoggerFactory.cs" company="ACBr.Net">
+// <copyright file="CalcDigFormula.cs" company="ACBr.Net">
 // Esta biblioteca é software livre; você pode redistribuí-la e/ou modificá-la
 // sob os termos da Licença Pública Geral Menor do GNU conforme publicada pela
 // Free Software Foundation; tanto a versão 2.1 da Licença, ou (a seu critério)
@@ -25,27 +25,25 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
 
-namespace ACBr.Net.Core.Logging
+namespace ACBr.Net.Core.Enum
 {
     /// <summary>
-    /// Interface ILoggerFactory
+    /// Enum CalcDigFormula
     /// </summary>
-	public interface ILoggerFactory
-	{
+    public enum CalcDigFormula
+    {
         /// <summary>
-        /// Loggers for.
+        /// The modulo11
         /// </summary>
-        /// <param name="keyName">Name of the key.</param>
-        /// <returns>IInternalLogger.</returns>
-		IInternalLogger LoggerFor(string keyName);
-
+        Modulo11,
         /// <summary>
-        /// Loggers for.
+        /// The modulo10 pis
         /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns>IInternalLogger.</returns>
-		IInternalLogger LoggerFor(Type type);
-	}
+        Modulo10PIS,
+        /// <summary>
+        /// The modulo10
+        /// </summary>
+        Modulo10
+    }
 }

@@ -4,26 +4,37 @@
 // Created          : 06-04-2014
 //
 // Last Modified By : RFTD
-// Last Modified On : 06-04-2014
+// Last Modified On : 01-30-2015
 // ***********************************************************************
 // <copyright file="IListExtension.cs" company="ACBr.Net">
-//     Copyright (c) ACBr.Net. All rights reserved.
+// Esta biblioteca é software livre; você pode redistribuí-la e/ou modificá-la
+// sob os termos da Licença Pública Geral Menor do GNU conforme publicada pela
+// Free Software Foundation; tanto a versão 2.1 da Licença, ou (a seu critério)
+// qualquer versão posterior.
+//
+// Esta biblioteca é distribuída na expectativa de que seja útil, porém, SEM
+// NENHUMA GARANTIA; nem mesmo a garantia implícita de COMERCIABILIDADE OU
+// ADEQUAÇÃO A UMA FINALIDADE ESPECÍFICA. Consulte a Licença Pública Geral Menor
+// do GNU para mais detalhes. (Arquivo LICENÇA.TXT ou LICENSE.TXT)
+//
+// Você deve ter recebido uma cópia da Licença Pública Geral Menor do GNU junto
+// com esta biblioteca; se não, escreva para a Free Software Foundation, Inc.,
+// no endereço 59 Temple Street, Suite 330, Boston, MA 02111-1307 USA.
+// Você também pode obter uma copia da licença em:
+// http://www.opensource.org/licenses/lgpl-license.php
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
-using System.Linq;
 using System.Collections.Generic;
 
-/// <summary>
-/// The Core namespace.
-/// </summary>
-namespace ACBr.Net.Core
+namespace ACBr.Net.Core.Extensions
 {
 	/// <summary>
 	/// Class IListExtension.
 	/// </summary>
-	public static class IListExtension
+	public static class ListExtension
 	{
 		/// <summary>
 		/// Adiciona uma string com quebra de linha na lista como se fosse uma ou mais linhas
@@ -32,7 +43,7 @@ namespace ACBr.Net.Core
 		/// <param name="texto">O texto.</param>
 		public static void AddText(this IList<string> list, string texto)
 		{
-			var textos = texto.Split(new string[] { Environment.NewLine, "\n" }, StringSplitOptions.RemoveEmptyEntries);
+			var textos = texto.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.RemoveEmptyEntries);
 			foreach (var text in textos)
 				list.Add(text);
 		}
@@ -42,9 +53,38 @@ namespace ACBr.Net.Core
 		/// </summary>
 		/// <param name="array">The array.</param>
 		/// <returns>String com todos os dados da lista de strings</returns>
-		public static string AsString(this List<string> array)
+		public static string AsString(this IEnumerable<string> array)
 		{
-			return String.Join(Environment.NewLine, array);
+			return string.Join(Environment.NewLine, array);
 		}
+
+        /// <summary>
+        /// Tries the get.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the tk.</typeparam>
+        /// <typeparam name="TValue">The type of the t value.</typeparam>
+        /// <param name="dictionary">The dictionary.</param>
+        /// <param name="key">The key.</param>
+        /// <returns>V.</returns>
+        public static TValue TryGet<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
+        {
+            return dictionary.TryGet(key, default(TValue));
+        }
+        /// <summary>
+        /// Tries the get.
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dictionary">The dictionary.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <returns>V.</returns>
+        public static TValue TryGet<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue)
+        {
+            if (dictionary != null && dictionary.ContainsKey(key))
+                return dictionary[key];
+
+            return defaultValue;
+        }
 	}
 }

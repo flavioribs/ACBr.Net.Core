@@ -20,6 +20,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography.Xml;
 using System.Xml;
 using System.Xml.Schema;
+using ACBr.Net.Core.Extensions;
 
 namespace ACBr.Net.Core.Util
 {

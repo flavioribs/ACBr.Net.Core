@@ -4,17 +4,33 @@
 // Created          : 03-22-2014
 //
 // Last Modified By : RFTD
-// Last Modified On : 10-24-2013
+// Last Modified On : 04-24-2014
 // ***********************************************************************
 // <copyright file="ACBrDevice.cs" company="ACBr.Net">
-//     Copyright (c) ACBr.Net. All rights reserved.
+// Esta biblioteca é software livre; você pode redistribuí-la e/ou modificá-la
+// sob os termos da Licença Pública Geral Menor do GNU conforme publicada pela
+// Free Software Foundation; tanto a versão 2.1 da Licença, ou (a seu critério)
+// qualquer versão posterior.
+//
+// Esta biblioteca é distribuída na expectativa de que seja útil, porém, SEM
+// NENHUMA GARANTIA; nem mesmo a garantia implícita de COMERCIABILIDADE OU
+// ADEQUAÇÃO A UMA FINALIDADE ESPECÍFICA. Consulte a Licença Pública Geral Menor
+// do GNU para mais detalhes. (Arquivo LICENÇA.TXT ou LICENSE.TXT)
+//
+// Você deve ter recebido uma cópia da Licença Pública Geral Menor do GNU junto
+// com esta biblioteca; se não, escreva para a Free Software Foundation, Inc.,
+// no endereço 59 Temple Street, Suite 330, Boston, MA 02111-1307 USA.
+// Você também pode obter uma copia da licença em:
+// http://www.opensource.org/licenses/lgpl-license.php
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.IO.Ports;
 using System.Threading;
 using System.Windows.Forms;
+using ACBr.Net.Core.Exceptions;
 
 #if COM_INTEROP
 
@@ -22,10 +38,7 @@ using System.Runtime.InteropServices;
 
 #endif
 
-/// <summary>
-/// The Core namespace.
-/// </summary>
-namespace ACBr.Net.Core
+namespace ACBr.Net.Core.Device
 {
 
 #if COM_INTEROP
@@ -54,11 +67,11 @@ namespace ACBr.Net.Core
         /// <summary>
         /// The ac br device set baud exception
         /// </summary>
-        const string ACBrDeviceSetBaudException        = "Valor deve estar na faixa de 50 a 4000000.\nNormalmente os equipamentos Seriais utilizam: 9600";
+        const string ACBrDeviceSetBaudException        = "Valor deve estar na faixa de 50 a 4000000.\n\rNormalmente os equipamentos Seriais utilizam: 9600";
         /// <summary>
         /// The ac br device set data exception
         /// </summary>
-        const string ACBrDeviceSetDataException        = "Valor deve estar na faixa de 5 a 8.\nNormalmente os equipamentos Seriais utilizam: 7 ou 8";
+        const string ACBrDeviceSetDataException        = "Valor deve estar na faixa de 5 a 8.\n\rNormalmente os equipamentos Seriais utilizam: 7 ou 8";
         /// <summary>
         /// The ac br device set porta exception
         /// </summary>
@@ -75,15 +88,15 @@ namespace ACBr.Net.Core
         /// <summary>
         /// The COM port
         /// </summary>
-        private SerialPort COMPort;
+        private SerialPort ComPort;
         /// <summary>
         /// The port
         /// </summary>
-        private string port;
+        private string Port;
         /// <summary>
         /// The timeout
         /// </summary>
-        private int timeout;
+        private int Timeout;
         /// <summary>
         /// The baud
         /// </summary>
@@ -91,27 +104,27 @@ namespace ACBr.Net.Core
         /// <summary>
         /// The data
         /// </summary>
-        private int data;
+        private int Data;
         /// <summary>
         /// The hard
         /// </summary>
-        private bool hard;
+        private bool Hard;
         /// <summary>
         /// The soft
         /// </summary>
-        private bool soft;
+        private bool Soft;
         /// <summary>
         /// The interval
         /// </summary>
-        private int interval;
+        private int Interval;
         /// <summary>
         /// The hand
         /// </summary>
-        private Handshake hand;
+        private Handshake Hand;
         /// <summary>
         /// The stop
         /// </summary>
-        private StopBits stop;
+        private StopBits Stop;
         /// <summary>
         /// The parity
         /// </summary>
@@ -122,21 +135,21 @@ namespace ACBr.Net.Core
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ACBrDevice"/> class.
+        /// Initializes a new instance of the <see cref="ACBrDevice" /> class.
         /// </summary>
         public ACBrDevice()
 		{
-            port = string.Empty;
+            Port = string.Empty;
             Ativo = false;
-            timeout = 3;
+            Timeout = 3;
             parity = Parity.None;
-            hard = false;
-            soft = false;
-            data = 8;
+            Hard = false;
+            Soft = false;
+            Data = 8;
             baud = 9600;
             ProcessMessages = true;
             SendBytesCount = 0;
-            interval = 0;
+            Interval = 0;
         }
 
 		#endregion Constructor
@@ -144,7 +157,7 @@ namespace ACBr.Net.Core
 		#region Properties
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="ACBrDevice"/> is ativo.
+        /// Gets a value indicating whether this <see cref="ACBrDevice" /> is ativo.
         /// </summary>
         /// <value><c>true</c> if ativo; otherwise, <c>false</c>.</value>
         public bool Ativo { get; private set; }
@@ -153,7 +166,11 @@ namespace ACBr.Net.Core
         /// Gets or sets the porta.
         /// </summary>
         /// <value>The porta.</value>
-        public string Porta { get; set; }
+        public string Porta
+        {
+            get { return Port; }
+            set { SetPorta(value); }
+        }
 
         /// <summary>
         /// Gets or sets the baud.
@@ -161,14 +178,8 @@ namespace ACBr.Net.Core
         /// <value>The baud.</value>
         public int Baud 
         {
-            get
-            {
-                return baud;
-            }
-            set
-            {
-                SetBaund(value);
-            }
+            get { return baud; }
+            set { SetBaund(value); }
         }
 
         /// <summary>
@@ -177,14 +188,8 @@ namespace ACBr.Net.Core
         /// <value>The data bits.</value>
         public int DataBits
         {
-            get
-            {
-                return data;
-            }
-            set
-            {
-                SetData(value);
-            }
+            get { return Data; }
+            set { SetData(value); }
         }
 
         /// <summary>
@@ -193,14 +198,8 @@ namespace ACBr.Net.Core
         /// <value>The parity.</value>
         public Parity Parity 
         { 
-            get
-            {
-                return parity;
-            }
-            set
-            {
-                SetParity(value);
-            }
+            get { return parity; }
+            set { SetParity(value); }
         }
 
         /// <summary>
@@ -209,14 +208,8 @@ namespace ACBr.Net.Core
         /// <value>The stop bits.</value>
         public StopBits StopBits
         {
-            get
-            {
-                return stop;
-            }
-            set
-            {
-                SetStop(value);
-            }
+            get { return Stop; }
+            set { SetStop(value); }
         }
 
         /// <summary>
@@ -225,14 +218,8 @@ namespace ACBr.Net.Core
         /// <value>The hand shake.</value>
         public Handshake HandShake
         {
-            get
-            {
-                return hand;
-            }
-            set
-            {
-                SetHandshake(value);
-            }
+            get { return Hand; }
+            set { SetHandshake(value); }
         }
 
         /// <summary>
@@ -241,14 +228,8 @@ namespace ACBr.Net.Core
         /// <value><c>true</c> if [hard flow]; otherwise, <c>false</c>.</value>
         public bool HardFlow
         {
-            get
-            {
-                return hard;
-            }
-            set
-            {
-                SetHardflow(value);
-            }
+            get { return Hard; }
+            set { SetHardflow(value); }
         }
 
         /// <summary>
@@ -257,14 +238,8 @@ namespace ACBr.Net.Core
         /// <value><c>true</c> if [soft flow]; otherwise, <c>false</c>.</value>
         public bool SoftFlow
         {
-            get
-            {
-                return soft;
-            }
-            set
-            {
-                SetSoftflow(value);
-            }
+            get { return Soft; }
+            set { SetSoftflow(value); }
         }
 
         /// <summary>
@@ -273,14 +248,8 @@ namespace ACBr.Net.Core
         /// <value>The time out.</value>
         public int TimeOut
         {
-            get
-            {
-                return timeout;
-            }
-            set
-            {
-                SetTimeout(value);
-            }
+            get { return Timeout; }
+            set { SetTimeout(value); }
         }
 
         /// <summary>
@@ -295,14 +264,8 @@ namespace ACBr.Net.Core
         /// <value>The send bytes interval.</value>
         public int SendBytesInterval
         {
-            get
-            {
-                return interval;
-            }
-            set
-            {
-                SetBytesInterval(value);
-            }
+            get { return Interval; }
+            set { SetBytesInterval(value); }
         }
 
         /// <summary>
@@ -325,10 +288,10 @@ namespace ACBr.Net.Core
             if (Ativo)
                 throw new ACBrException(ACBrDeviceSetPortaException);
 
-            if (port.Equals(value))
+            if (Port.Equals(value))
                 return;
 
-            port = value;
+            Port = value;
         }
 
         /// <summary>
@@ -337,12 +300,18 @@ namespace ACBr.Net.Core
         /// <param name="value">The value.</param>
         private void SetHandshake(Handshake value)
         {
-            if (value == Handshake.RequestToSend)
-                hard = true;
-            else if (value == Handshake.XOnXOff)
-                soft = true;
+            switch (value)
+            {
+                case Handshake.RequestToSend:
+                    Hard = true;
+                    break;
 
-            hand = value;
+                case Handshake.XOnXOff:
+                    Soft = true;
+                    break;
+            }
+
+            Hand = value;
         }
 
         /// <summary>
@@ -351,12 +320,9 @@ namespace ACBr.Net.Core
         /// <param name="value">if set to <c>true</c> [value].</param>
         private void SetHardflow(bool value)
         {
-            if (value)
-                hand = Handshake.RequestToSend;
-            else
-                hand = Handshake.None;
+            Hand = value ? Handshake.RequestToSend : Handshake.None;
 
-            hard = value;
+            Hard = value;
         }
 
         /// <summary>
@@ -365,12 +331,9 @@ namespace ACBr.Net.Core
         /// <param name="value">if set to <c>true</c> [value].</param>
         private void SetSoftflow(bool value)
         {
-            if (value)
-                hand = Handshake.XOnXOff;
-            else
-                hand = Handshake.None;
+            Hand = value ? Handshake.XOnXOff : Handshake.None;
 
-            soft = true;
+            Soft = true;
         }
 
         /// <summary>
@@ -402,13 +365,13 @@ namespace ACBr.Net.Core
             if (Ativo)
                 return;
 
-            if (data == value)
+            if (Data == value)
                 return;
 
             if (value < 5 || value > 8)
                 throw new ACBrException(ACBrDeviceSetDataException);
 
-            data = value;
+            Data = value;
         }
 
         /// <summary>
@@ -417,19 +380,19 @@ namespace ACBr.Net.Core
         /// <param name="value">The value.</param>
         private void SetTimeout(int value)
         {
-            if (timeout == value)
+            if (Timeout == value)
                 return;
 
             if (value < 1)
                 value = 1;
 
-            timeout = value;
+            Timeout = value;
 
-            if (COMPort != null)
-            {
-                COMPort.WriteTimeout = timeout * 1000;
-                COMPort.ReadTimeout = timeout * 1000;
-            }
+            if (ComPort == null)
+                return;
+
+            ComPort.WriteTimeout = Timeout * 1000;
+            ComPort.ReadTimeout = Timeout * 1000;
         }
 
         /// <summary>
@@ -438,13 +401,13 @@ namespace ACBr.Net.Core
         /// <param name="value">The value.</param>
         private void SetBytesInterval(int value)
         {
-            if (interval == value)
+            if (Interval == value)
                 return;
 
-            if (interval < 0)
+            if (Interval < 0)
                 value = 0;
 
-            interval = value;
+            Interval = value;
         }
 
         /// <summary>
@@ -453,13 +416,13 @@ namespace ACBr.Net.Core
         /// <param name="value">The value.</param>
         private void SetStop(StopBits value)
         {
-            if (stop == value)
+            if (Stop == value)
                 return;
 
-            stop = value;
+            Stop = value;
 
-            if (COMPort != null)
-                COMPort.StopBits = stop;
+            if (ComPort != null)
+                ComPort.StopBits = Stop;
         }
 
         /// <summary>
@@ -473,8 +436,8 @@ namespace ACBr.Net.Core
 
             parity = value;
 
-            if (COMPort != null)
-                COMPort.Parity = parity;
+            if (ComPort != null)
+                ComPort.Parity = parity;
         }
 
         #endregion SetGetMethods
@@ -484,11 +447,9 @@ namespace ACBr.Net.Core
         /// <summary>
         /// Ativars this instance.
         /// </summary>
-        /// <exception cref="ACBrException">
-        /// Dispositivo já esta ativo
+        /// <exception cref="ACBrException">Dispositivo já esta ativo
         /// or
-        /// or
-        /// </exception>
+        /// or</exception>
         public void Ativar()
         {
             try
@@ -500,12 +461,12 @@ namespace ACBr.Net.Core
                     throw new ACBrException(ACBrDeviceAtivarPortaException);
 
                 ConfigurarSerial();
-                COMPort.Open();
+                ComPort.Open();
                 Ativo = true;
             }
             catch (Exception ex)
             {
-                var msg = string.Format("{0}{1}", ACBrDeviceAtivarException, port);
+                var msg = string.Format("{0}{1}", ACBrDeviceAtivarException, Port);
                 throw new ACBrException(msg, ex);
             }
         }
@@ -513,11 +474,9 @@ namespace ACBr.Net.Core
         /// <summary>
         /// Desativars this instance.
         /// </summary>
-        /// <exception cref="ACBrException">
-        /// Dispositivo não está ativo
+        /// <exception cref="ACBrException">Dispositivo não está ativo
         /// or
-        /// Erro ao desativar o dispositivo
-        /// </exception>
+        /// Erro ao desativar o dispositivo</exception>
         public void Desativar()
         {
             try
@@ -525,8 +484,8 @@ namespace ACBr.Net.Core
                 if (!Ativo)
                     throw new ACBrException("Dispositivo não está ativo");
 
-                COMPort.Close();
-                COMPort.Dispose();
+                ComPort.Close();
+                ComPort.Dispose();
                 Ativo = false;
             }
             catch (Exception ex)
@@ -548,24 +507,25 @@ namespace ACBr.Net.Core
             if (timeout < 1)
                 timeout = 1;
 
-            bool retorno = false;
+            var retorno = false;
             var limite = DateTime.Now.AddSeconds(timeout);
             while (limite > DateTime.Now || retorno)
             {
-                if(hand == Handshake.RequestToSend)
-                    retorno = COMPort.CtsHolding;
-                if (hand == Handshake.XOnXOff)
-                    retorno = COMPort.CDHolding;
+                if(Hand == Handshake.RequestToSend)
+                    retorno = ComPort.CtsHolding;
 
-                if (!retorno)
-                {
-                    if (ProcessMessages)
-                        Application.DoEvents();
+                if (Hand == Handshake.XOnXOff)
+                    retorno = ComPort.CDHolding;
 
-                    Thread.Sleep(10);
-                }
+                if (retorno) 
+                    continue;
+
+                if (ProcessMessages)
+                    Application.DoEvents();
+
+                Thread.Sleep(10);
             }
-
+            
             return retorno;
         }
 
@@ -575,16 +535,16 @@ namespace ACBr.Net.Core
         /// <param name="value">The value.</param>
         public void EnviaString(string value)
         {
-            int i = 0;
-            int max = value.Length;
-            int nbytes = SendBytesCount;
+            var i = 0;
+            var max = value.Length;
+            var nbytes = SendBytesCount;
 
             if (nbytes == 0)
                 nbytes = max;
 
             while (i <= max)
             {
-                COMPort.Write(value.Substring(i, nbytes));
+                ComPort.Write(value.Substring(i, nbytes));
 
                 if(SendBytesInterval > 0)
                     Thread.Sleep(SendBytesInterval);
@@ -598,22 +558,22 @@ namespace ACBr.Net.Core
         /// </summary>
         private void ConfigurarSerial()
         {            
-            if(COMPort == null)
-                COMPort = new SerialPort();
+            if(ComPort == null)
+                ComPort = new SerialPort();
             
-            if(COMPort.IsOpen)
+            if(ComPort.IsOpen)
                 return;
 
-            COMPort.PortName = port;
-            COMPort.ReadTimeout = timeout * 1000;
-            COMPort.WriteTimeout = timeout * 1000;
-            COMPort.BaudRate = baud;
-            COMPort.DataBits = data;
-            COMPort.Parity = parity;
-            COMPort.StopBits = stop;
-            COMPort.Handshake = hand;
-            COMPort.ErrorReceived += COMPort_ErrorReceived;
-            COMPort.DataReceived += COMPort_DataReceived;
+            ComPort.PortName = Port;
+            ComPort.ReadTimeout = Timeout * 1000;
+            ComPort.WriteTimeout = Timeout * 1000;
+            ComPort.BaudRate = baud;
+            ComPort.DataBits = Data;
+            ComPort.Parity = parity;
+            ComPort.StopBits = Stop;
+            ComPort.Handshake = Hand;
+            ComPort.ErrorReceived += COMPort_ErrorReceived;
+            ComPort.DataReceived += COMPort_DataReceived;
         }
 
         #endregion Methods
@@ -624,8 +584,8 @@ namespace ACBr.Net.Core
         /// Handles the ErrorReceived event of the COMPort control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="SerialErrorReceivedEventArgs"/> instance containing the event data.</param>
-        void COMPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
+        /// <param name="e">The <see cref="SerialErrorReceivedEventArgs" /> instance containing the event data.</param>
+        private void COMPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
         {
             var sp = (SerialPort)sender;            
         }
@@ -634,11 +594,11 @@ namespace ACBr.Net.Core
         /// Handles the DataReceived event of the COMPort control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="SerialDataReceivedEventArgs"/> instance containing the event data.</param>
-        void COMPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        /// <param name="e">The <see cref="SerialDataReceivedEventArgs" /> instance containing the event data.</param>
+        private void COMPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             var sp = (SerialPort)sender;
-            string indata = sp.ReadExisting();
+            var indata = sp.ReadExisting();
         }
 
         #endregion Eventhandlers
@@ -656,13 +616,13 @@ namespace ACBr.Net.Core
                 GC.SuppressFinalize(this);
             }
 
-            if (COMPort != null)
-            {
-                if (Ativo)
-                    COMPort.Close();
+            if (ComPort == null) 
+                return;
 
-                COMPort.Dispose();
-            }
+            if (Ativo)
+                ComPort.Close();
+
+            ComPort.Dispose();
         }
 
         /// <summary>
