@@ -28,6 +28,7 @@
 
 using System;
 using ACBr.Net.Core.Enum;
+using ACBr.Net.Core.Extensions;
 
 namespace ACBr.Net.Core
 {
@@ -121,7 +122,7 @@ namespace ACBr.Net.Core
 
             //Calculando a Soma dos digitos de traz para diante, multiplicadas por BASE
 
-            for (int i = 0; i < tamanho; i++)
+            for (var i = 0; i < tamanho; i++)
             {
                 var N = Documento[tamanho - i].ToInt32();
                 var vlrCalc = (N * vlrBase);
@@ -171,9 +172,6 @@ namespace ACBr.Net.Core
                     DigitoFinal = 10 - ModuloFinal;
                     if (DigitoFinal >= 10)
                         DigitoFinal = 0;
-                    break;
-
-                default:
                     break;
             }
         }
