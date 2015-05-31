@@ -135,7 +135,7 @@ namespace ACBr.Net.Core.Extensions
         public static string CalcularFatorVencimento(this DateTime dataVencimento)
         {
             var dt = new DateTime(1997, 10, 07);
-            return string.Format("{0:0000}", (dataVencimento - dt).TotalDays);
+            return string.Format("{0:0000}", (dataVencimento - dt).TotalDays % 9000 + 1000);
         }
 
         /// <summary>
