@@ -48,7 +48,7 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("0.9.1.0")]
-[assembly: AssemblyFileVersion("0.9.1.6")]
+[assembly: AssemblyFileVersion("0.9.1.7")]
 
 //Internal Visible
 //Especificar as assembly que tem acesso aos metodos internos da dll

@@ -54,6 +54,23 @@ namespace ACBr.Net.Core.Extensions
                 synchronizeInvoke.Invoke(eventHandler, new[] { sender, e });
         }
 
+		/// <summary>
+		/// Raises the specified e.
+		/// </summary>
+		/// <param name="eventHandler">The event handler.</param>
+		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+		public static void Raise(this EventHandler eventHandler, EventArgs e)
+		{
+			if (eventHandler == null)
+				return;
+
+			var synchronizeInvoke = eventHandler.Target as ISynchronizeInvoke;
+			if (synchronizeInvoke == null)
+				eventHandler.DynamicInvoke(e);
+			else
+				synchronizeInvoke.Invoke(eventHandler, new object[] { e });
+		}
+
         /// <summary>
         /// Chama o evento.
         /// </summary>
@@ -73,5 +90,23 @@ namespace ACBr.Net.Core.Extensions
             else
                 synchronizeInvoke.Invoke(eventHandler, new[] { sender, e });
         }
+
+		/// <summary>
+		/// Chama o evento.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="eventHandler">The event handler.</param>
+		/// <param name="e">The e.</param>
+		public static void Raise<T>(this EventHandler<T> eventHandler, T e) where T : EventArgs
+		{
+			if (eventHandler == null)
+				return;
+
+			var synchronizeInvoke = eventHandler.Target as ISynchronizeInvoke;
+			if (synchronizeInvoke == null)
+				eventHandler.DynamicInvoke(e);
+			else
+				synchronizeInvoke.Invoke(eventHandler, new object[] { e });
+		}
     }
 }
